@@ -2,36 +2,40 @@
 :-lib(ic_global).
 :-lib(ic_edge_finder).
 
-%%% number_of_digits/2
-%%% number_of_digits(Number,Digits)
-%%% Succeeds if Digits is the number (length) of integer 
-%%% Number
-number_of_digits(Number,Digits):-
-	number_string(Number,Str),
-	string_length(Str,Digits).
+%%% split_check/3
+%%% split_check(OriginalSum,Value1,Value2)
+%%% Succeeds if Value1 + Value 2 = OriginalSum and 
+%%% numbers Value1 and Value2 do not contain any digits.
+split_check(OriginalSum,Value1,Value2):-
+	number_of_digits(OriginalSum,Len),
+	% numbers consist of digits. The maximum 
+	% number of digits is the number of digits of the 
+	% Original Sum.
+	length(Digits1,Len),
+	length(Digits2,Len),
+	append(Digits1,Digits2,Digits),
+	Digits #:: [0..3,5..9],
+	% Evaluate a sequence of digits as an integer.
+	evaluate(Digits1,Value1),
+	evaluate(Digits2,Value2),
+	Value1 #>0, Value2 #> 0, 
+	Value1 + Value2 #= OriginalSum,
+	% labeling on the digits.
+	labeling(Digits).
+ 
+%%% evaluate/2
+%%% evaluate(Digits,Value)
+%%% Succeeds if Value is the integer formed by the 
+%%% sequence of Digits.
+evaluate(Digits,Value):-
+	evaluate(Digits,_,Value).
 
-% Split a check with number 4
-% Into 2 checks without number 4
-split_check(Amount, Check1, Check2):-
-	% Initiliaze values
-	[Check1, Check2] #:: [1..Amount-1],
-	Check1 + Check2 #= Amount,
-	% Give values
-	labeling([Check1, Check2]),
-	% Get the amount of digits in the current number
-	number_of_digits(Check1, Digits1),
-	number_of_digits(Check2, Digits2),
-	% Check if contraints are true
-	contraints(Check1, Digits1),
-	contraints(Check2, Digits2).
-
-contraints(_, 0):- !.
-
-contraints(Check, Digits):-
-	Divisor is 10^(Digits - 1),
-	Quotient is Check // Divisor,
-	Quotient \= 4,
-	NewCheck is mod(Check, Divisor),
-	NewDigits is Digits - 1,
-	contraints(NewCheck, NewDigits).
-
+%%% evaluate/3
+%%% Auxiliary predicate to evaluate/2
+%%% The second argument is the position of the digit.
+evaluate([],0,0).
+evaluate([D|RestD],Exp,Value):-
+	evaluate(RestD,RExp,RestValue),
+	Exp is RExp + 1,
+	F is (10^RExp),
+	Value #= D * F + RestValue.
