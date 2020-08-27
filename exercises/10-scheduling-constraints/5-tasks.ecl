@@ -3,6 +3,7 @@
 :-lib(branch_and_bound).
 :-lib(ic_edge_finder).
 
+%Job | Duration | Requirements
 stuff(1, 5, 4).
 stuff(2, 8, 3).
 stuff(3, 13, 4).
