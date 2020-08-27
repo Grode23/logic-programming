@@ -41,6 +41,8 @@ Most of the exercises are a few lines. The beauty of Logic Programming.
       - **Minimum of list**
       - **Proper set:** Return Yes if there are no duplicates in the list.
       - **Map** (with findall)
+      - **Dynamic Stack:** Modelization of a stack with dymanic.
+      - **Dynamic fibonacci**
       - **Model:** Create operators such as AND, NAND etc. and functions model and theory that return the possible combinations that return True.
   7. Graph search
       - **Ticket machine:** Modelization of a ticket machine. Returns every possible combination of coins that has an outcome of 50.
